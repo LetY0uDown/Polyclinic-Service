@@ -2,13 +2,13 @@
 
 public class Schedule
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     public DateTime Date { get; set; }
 
-    public Guid? ClientId { get; set; }
+    public string? ClientId { get; set; }
 
-    public Guid? DoctorId { get; set; }
+    public string? DoctorId { get; set; }
 
     public int StatusId { get; set; }
 

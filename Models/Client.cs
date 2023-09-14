@@ -1,10 +1,8 @@
-﻿using System.Text.Json.Serialization;
-
-namespace API_Host.Models;
+﻿namespace API_Host.Models;
 
 public class Client
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
 
     public string Password { get; set; } = null!;
 

@@ -18,10 +18,10 @@ public class JWTTokenGenerator
         _securityKey = new(Encoding.UTF8.GetBytes(_config["JWT:Key"]!));
     }
 
-    public string GetToken (string username, string password)
+    public string GetToken (string email, string password)
     {
         List<Claim> claims = new() {
-            new(ClaimTypes.Name, username),
+            new(ClaimTypes.Email, email),
             new(ClaimTypes.UserData, password)
         };
 
