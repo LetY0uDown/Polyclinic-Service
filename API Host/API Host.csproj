@@ -24,7 +24,10 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Tools\" />
-    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>
