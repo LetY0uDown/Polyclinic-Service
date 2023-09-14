@@ -2,7 +2,7 @@
 
 public class Client
 {
-    public string Id { get; set; }
+    public string ID { get; set; }
 
     public string Password { get; set; } = null!;
 

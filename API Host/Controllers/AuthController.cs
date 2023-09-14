@@ -47,7 +47,7 @@ public class AuthController : ControllerBase
                 return Unauthorized("Неверный пароль. Попробуйте ввести его ещё раз, или восстановить доступ к вашей учётной записи.");
             }
 
-            var auth = new AuthorizationData(client.Id, _jwtTokenGenerator.GetToken(client.Email, client.Password));
+            var auth = new AuthorizationData(client.ID, _jwtTokenGenerator.GetToken(client.Email, client.Password));
 
             return Ok(auth);
 
@@ -70,7 +70,7 @@ public class AuthController : ControllerBase
             }
 
             var client = new Client {
-                Id = Guid.NewGuid().ToString(),
+                ID = Guid.NewGuid().ToString(),
                 Email = data.EMail,
                 Password = _hasher.Hash(data.Password)
             };
@@ -78,7 +78,7 @@ public class AuthController : ControllerBase
             await _context.Clients.AddAsync(client);
             await _context.SaveChangesAsync();
 
-            var auth = new AuthorizationData(client.Id, _jwtTokenGenerator.GetToken(client.Email, client.Password));
+            var auth = new AuthorizationData(client.ID, _jwtTokenGenerator.GetToken(client.Email, client.Password));
 
             return Ok(auth);
         }

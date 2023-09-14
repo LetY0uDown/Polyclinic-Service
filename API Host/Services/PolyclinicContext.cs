@@ -10,6 +10,8 @@ public class PolyclinicContext : DbContext
     public PolyclinicContext (IConfiguration configuration)
     {
         _configuration = configuration;
+
+        Database.EnsureCreated();
     }
 
     public virtual DbSet<Cabinet> Cabinets { get; set; }
@@ -40,7 +42,7 @@ public class PolyclinicContext : DbContext
         modelBuilder.Entity<Client>(entity => {
             entity.ToTable("Client");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.ID)
                   .HasMaxLength(36)
                   .IsUnicode(false)
                   .IsFixedLength()
@@ -56,7 +58,7 @@ public class PolyclinicContext : DbContext
         modelBuilder.Entity<Doctor>(entity => {
             entity.ToTable("Doctor");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.ID)
                   .HasMaxLength(36)
                   .IsUnicode(false)
                   .IsFixedLength()
@@ -81,7 +83,7 @@ public class PolyclinicContext : DbContext
         modelBuilder.Entity<Schedule>(entity => {
             entity.ToTable("Schedule");
 
-            entity.Property(e => e.Id)
+            entity.Property(e => e.ID)
                   .HasMaxLength(36)
                   .IsUnicode(false)
                   .IsFixedLength()
@@ -116,17 +118,54 @@ public class PolyclinicContext : DbContext
         modelBuilder.Entity<ScheduleStatus>(entity => {
             entity.ToTable("ScheduleStatus");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ID).HasColumnName("ID");
             entity.Property(e => e.Status).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Speciality>(entity => {
             entity.ToTable("Speciality");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.ID).HasColumnName("ID");
             entity.Property(e => e.Title)
                   .HasMaxLength(50)
                   .HasColumnName("TItle");
+        });
+
+        SeedData(modelBuilder);
+    }
+
+    private void SeedData (ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Speciality>().HasData(new Speciality() {
+            ID = 1,
+            Title = "Хирург"
+        }, new Speciality() {
+            ID = 2,
+            Title = "Стоматолог"
+        }, new Speciality() {
+            ID = 3,
+            Title = "Терапевт"
+        });
+
+        modelBuilder.Entity<Cabinet>().HasData(new Cabinet() {
+            Number = 41
+        }, new Cabinet() {
+            Number = 62
+        }, new Cabinet() {
+            Number = 12
+        }, new Cabinet() {
+            Number = 1
+        });
+
+        modelBuilder.Entity<ScheduleStatus>().HasData(new ScheduleStatus() {
+            ID = 1,
+            Status = "Ожидание приёма"
+        }, new ScheduleStatus() {
+            ID = 1,
+            Status = "Приём оказан"
+        }, new ScheduleStatus() {
+            ID = 1,
+            Status = "Приём не оказан"
         });
     }
 }

@@ -2,7 +2,7 @@
 
 public class Schedule
 {
-    public string Id { get; set; }
+    public string ID { get; set; }
 
     public DateTime Date { get; set; }
 
