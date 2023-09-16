@@ -2,10 +2,10 @@
 
 public record class AuthorizationData
 {
-    public AuthorizationData (string ID, string jWTToken)
+    public AuthorizationData (string Id, string jwtToken)
     {
-        ID = ID;
-        JWTToken = jWTToken;
+        ID = Id;
+        JWTToken = jwtToken;
     }
 
     public string ID { get; private init; }

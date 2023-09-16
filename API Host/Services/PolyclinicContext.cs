@@ -134,7 +134,7 @@ public class PolyclinicContext : DbContext
         SeedData(modelBuilder);
     }
 
-    private void SeedData (ModelBuilder modelBuilder)
+    private static void SeedData (ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Speciality>().HasData(new Speciality() {
             ID = 1,
@@ -161,10 +161,10 @@ public class PolyclinicContext : DbContext
             ID = 1,
             Status = "Ожидание приёма"
         }, new ScheduleStatus() {
-            ID = 1,
+            ID = 2,
             Status = "Приём оказан"
         }, new ScheduleStatus() {
-            ID = 1,
+            ID = 3,
             Status = "Приём не оказан"
         });
     }

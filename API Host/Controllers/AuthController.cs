@@ -38,7 +38,7 @@ public class AuthController : ControllerBase
             var client = await _context.Clients.FirstOrDefaultAsync(c => c.Email == data.EMail);
 
             if (client is null) {
-                return NotFound("Аккаунта с таким E-Mail адрессом не существует. Проверьте правильность ввода или зарегистрируйтесь.");
+                return NotFound("Аккаунта с таким E-Mail адресом не существует. Проверьте правильность ввода или зарегистрируйтесь.");
             }
 
             var hashedPass = _hasher.Hash(data.Password);

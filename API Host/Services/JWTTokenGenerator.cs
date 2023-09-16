@@ -22,7 +22,7 @@ public class JWTTokenGenerator
     {
         List<Claim> claims = new() {
             new(ClaimTypes.Email, email),
-            new(ClaimTypes.UserData, password)
+            new(ClaimTypes.Hash, password)
         };
 
         var token = new JwtSecurityToken(
