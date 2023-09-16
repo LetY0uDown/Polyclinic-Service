@@ -58,7 +58,7 @@ public class ClientsController : ControllerBase
             return Ok(client);
         }
         catch (Exception ex) {
-            _logger.LogError(ex, "Error occured while trying to get user by ID");
+            _logger.LogError(ex, "Error occured while trying to get client by ID");
             return BadRequest("Ой. " + ex.Message);
         }
     }
