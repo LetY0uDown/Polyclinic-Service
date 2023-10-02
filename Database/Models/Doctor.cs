@@ -1,12 +1,14 @@
-﻿namespace API_Host.Models;
+﻿using Database.Flags;
 
-public class Doctor
+namespace Database.Models;
+
+public class Doctor : IEntityModel, IDTOConvertable
 {
-    public Guid ID { get; set; }
+    public int ID { get; set; }
 
     public string Name { get; set; } = null!;
 
-    public string SecondName { get; set; } = null!;
+    public string Patronymic { get; set; } = null!;
 
     public string LastName { get; set; } = null!;
 
@@ -16,7 +18,7 @@ public class Doctor
 
     public Cabinet? Cabinet { get; set; }
 
-    public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+    public List<Schedule> Schedules { get; set; } = new List<Schedule>();
 
     public Speciality? Speciality { get; set; }
 }

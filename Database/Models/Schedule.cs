@@ -1,14 +1,16 @@
-﻿namespace API_Host.Models;
+﻿using Database.Flags;
 
-public class Schedule
+namespace Database.Models;
+
+public class Schedule : IEntityModel, IDTOConvertable
 {
-    public Guid ID { get; set; }
+    public int ID { get; set; }
 
     public DateTime Date { get; set; }
 
-    public Guid? ClientId { get; set; }
+    public int? ClientId { get; set; }
 
-    public Guid? DoctorId { get; set; }
+    public int? DoctorId { get; set; }
 
     public int StatusId { get; set; }
 

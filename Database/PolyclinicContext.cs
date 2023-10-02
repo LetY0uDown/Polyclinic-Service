@@ -1,7 +1,8 @@
-﻿using API_Host.Models;
+﻿using Database.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-namespace API_Host.Services;
+namespace Database;
 
 public class PolyclinicContext : DbContext
 {
@@ -52,7 +53,7 @@ public class PolyclinicContext : DbContext
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.Password).HasMaxLength(50);
-            entity.Property(e => e.SecondName).HasMaxLength(50);
+            entity.Property(e => e.Patronymic).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Doctor>(entity => {
@@ -66,7 +67,7 @@ public class PolyclinicContext : DbContext
 
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.SecondName).HasMaxLength(50);
+            entity.Property(e => e.Patronymic).HasMaxLength(50);
             entity.Property(e => e.SpecialityId).HasColumnName("SpecialityID");
 
             entity.HasOne(d => d.Cabinet)
@@ -128,12 +129,17 @@ public class PolyclinicContext : DbContext
             entity.Property(e => e.ID).HasColumnName("ID");
             entity.Property(e => e.Title)
                   .HasMaxLength(50)
-                  .HasColumnName("TItle");
+                  .HasColumnName("Title");
         });
 
         SeedData(modelBuilder);
     }
 
+    /// <summary>
+    /// Заполняет БД начальными данными, если их там ещё нет.
+    /// Вообще обычно выносится в отдельный класс, но мне чёт лень. Может позже
+    /// </summary>
+    /// <param name="modelBuilder"></param>
     private static void SeedData (ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Speciality>().HasData(new Speciality() {

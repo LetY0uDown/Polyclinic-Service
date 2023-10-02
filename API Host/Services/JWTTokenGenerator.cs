@@ -5,7 +5,7 @@ using System.Text;
 
 namespace API_Host.Services;
 
-public class JWTTokenGenerator
+public sealed class JWTTokenGenerator
 {
     private readonly IConfiguration _config;
 

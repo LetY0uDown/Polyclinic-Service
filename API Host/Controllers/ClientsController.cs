@@ -1,65 +1,73 @@
-﻿using API_Host.Models;
-using API_Host.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using API_Host.Services;
+using Database.Models;
+using Database.Services;
+using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Host.Controllers;
 
 [ApiController, Route("[controller]/")]
-public class ClientsController : ControllerBase
+public sealed class ClientsController : ControllerBase
 {
-    private readonly PolyclinicContext _context;
+    private readonly IHashids _hashId;
+    private readonly IClientService _clientService;
+    private readonly DTOConverter _dtoConverter;
 
-    private readonly ILogger<ClientsController> _logger;
-
-    public ClientsController (PolyclinicContext context, ILogger<ClientsController> logger)
+    public ClientsController (IHashids hashId, IClientService clientService,
+                              DTOConverter dtoConverter)
     {
-        _context = context;
-        _logger = logger;
+        _hashId = hashId;
+        _clientService = clientService;
+        _dtoConverter = dtoConverter;
     }
 
-    [HttpPut("{id:guid}"), Authorize]
-    public async Task<ActionResult> UpdateClientData ([FromRoute] string id, Client clientData)
+    [HttpPut("{hashid:hashid}")]
+    public async Task<ActionResult> UpdateClientData ([FromRoute] string id,
+                                                      [FromBody] DTO.ClientDTO clientData)
     {
-        try {
-            if (id != clientData.ID) {
-                return BadRequest("Какую-то фигню ты прислал");
-            }
-
-            var client = await _context.Clients.FindAsync (id);
-
-            if (client is null) {
-                return NotFound("Чё-то случилось. Если бы мы знали, что это такое, но мы не знаем, что это такое");
-            }
-
-            client.Name = clientData.Name;
-            client.LastName = clientData.LastName;
-            client.SecondName = clientData.SecondName;
-
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        } catch (Exception ex) {
-            _logger.LogError(ex, "Error occured while trying to update client's data");
-            return BadRequest("Ой. " + ex.Message);
+        if (id != clientData.ID) {
+            return BadRequest("Какую-то фигню ты прислал");
         }
+        
+        var client = await GetClientOrNull(id);
+
+        if (client is null) {
+            return NotFound("Ошибка.Данные не найдены D:");
+        }
+
+        client.Name = clientData.Name;
+        client.LastName = clientData.LastName;
+        client.Patronymic = clientData.Patronymic;
+
+        await _clientService.Repository.UpdateAsync(client);
+
+        return NoContent();
     }
 
-    [HttpGet("{id:guid}"), Authorize]
-    public async Task<ActionResult<Client>> GetClient ([FromRoute] string id)
+    [HttpGet("{hashid:hashid}")]
+    public async Task<ActionResult<DTO.ClientDTO>> GetClient ([FromRoute] string id)
     {
-        try {
-            var client = await _context.Clients.FindAsync(id);
+        var client = await GetClientOrNull(id);
 
-            if (client is null) {
-                return NotFound("Ошибка. Данные не найдены D:");
-            }
+        if (client is null) {
+            return NotFound("Ошибка.Данные не найдены D:");
+        }
 
-            return Ok(client);
+        return Ok(_dtoConverter.ConvertClient(client));
+    }
+
+    /// <summary>
+    /// Расшифровывает hash id и ищет клиента в базе
+    /// </summary>
+    /// <param name="hashid"></param>
+    /// <returns>null, если hash id предоставлен неверно или клиент не был найден, иначе возвращает клиента</returns>
+    private async Task<Client?> GetClientOrNull (string hashid)
+    {
+        var rawID = _hashId.Decode(hashid);
+        if (rawID.Length == 0) {
+            return null;
         }
-        catch (Exception ex) {
-            _logger.LogError(ex, "Error occured while trying to get client by ID");
-            return BadRequest("Ой. " + ex.Message);
-        }
+
+        return await _clientService.Repository.FindAsync(rawID[0]);
     }
 }

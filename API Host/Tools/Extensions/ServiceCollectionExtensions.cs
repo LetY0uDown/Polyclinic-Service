@@ -1,6 +1,10 @@
-﻿using API_Host.Models;
-using API_Host.Services;
+﻿using API_Host.Services;
 using API_Host.Services.Interfaces;
+using Database;
+using Database.Models;
+using Database.Repositories;
+using Database.Services;
+using HashidsNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -9,21 +13,54 @@ using System.Text;
 
 namespace API_Host.Tools.Extensions;
 
-public static class ServiceCollectionExtensions
+/// <summary>
+/// Набор методов-расширений для коллекции сервисов, используемых внутри API
+/// </summary>
+internal static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddServices (this IServiceCollection services)
+    internal static IServiceCollection AddTools (this IServiceCollection services, IConfiguration config)
     {
-        services.AddDbContext<PolyclinicContext>();
         services.AddTransient<IStringHasher, StringHasher>();
         services.AddTransient<JWTTokenGenerator>();
-        services.AddSingleton<IValidator<LoginData>, LoginDataValidator>();
+        services.AddSingleton<IHashids>(_ => new Hashids(config["Salt:IDs"], 8));
+        services.AddSingleton<DTOConverter>();
 
         return services;
     }
 
-    public static IServiceCollection AddSwaggerGenWithAuthorization (this IServiceCollection services)
+    /// <summary>
+    /// Добавляет в контейнер классы для работы с Базой Данных
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    internal static IServiceCollection AddDatabase (this IServiceCollection services)
+    {
+        services.AddDbContext<PolyclinicContext>();
+
+        services.AddScoped<IRepository<Client>, ClientRepository>();
+        services.AddScoped<IClientService, ClientService>();
+
+        services.AddScoped<IRepository<Doctor>, DoctorRepository>();
+
+        services.AddScoped<IRepository<Speciality>, SpecialityRepository>();
+
+        services.AddScoped<IRepository<Schedule>, ScheduleRepository>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Добавляет в проект Swagger с возможностью использовать JWT авторизацию
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="useAuthorization"></param>
+    /// <returns></returns>
+    internal static IServiceCollection AddSwaggerGen (this IServiceCollection services, bool useAuthorization)
     {
         services.AddSwaggerGen(option => {
+            if (!useAuthorization)
+                return;
+
             option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
             option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
                 In = ParameterLocation.Header,
@@ -52,7 +89,13 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddJWTAuthentication (this IServiceCollection services, IConfiguration config)
+    /// <summary>
+    /// Добавляет авторизацию с помощью JWT
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    internal static IServiceCollection AddJWTAuthentication (this IServiceCollection services, IConfiguration config)
     {
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => {
@@ -71,7 +114,14 @@ public static class ServiceCollectionExtensions
 
         services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                                                                             .RequireAuthenticatedUser()
-                                                                            .Build());
+        
+        return services;
+    }
+
+    internal static IServiceCollection AddRouteConstraints (this IServiceCollection services)
+    {
+        services.AddRouting(options =>
+            options.ConstraintMap.Add("hashid", typeof(HashIDConstraint)));
 
         return services;
     }

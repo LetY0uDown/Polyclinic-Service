@@ -4,6 +4,9 @@ using System.Text;
 
 namespace API_Host.Services;
 
+/// <summary>
+/// Класс, который реализует интерфейс для шифрования строк
+/// </summary>
 public sealed class StringHasher : IStringHasher
 {
     private readonly IConfiguration _configuration;
@@ -15,7 +18,7 @@ public sealed class StringHasher : IStringHasher
 
     public string Hash (string str)
     {
-        var saltBytes = Encoding.UTF8.GetBytes(_configuration["HashSalt"]!);
+        var saltBytes = Encoding.UTF8.GetBytes(_configuration["Salt:Password"]!);
 
         var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                         password: str,
