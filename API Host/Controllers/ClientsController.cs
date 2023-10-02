@@ -1,8 +1,8 @@
 ﻿using API_Host.Services;
-using Database.Models;
 using Database.Services;
 using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace API_Host.Controllers;
 
@@ -28,7 +28,7 @@ public sealed class ClientsController : ControllerBase
         if (id != clientData.ID) {
             return BadRequest("Какую-то фигню ты прислал");
         }
-        
+
         var client = await GetClientOrNull(id);
 
         if (client is null) {

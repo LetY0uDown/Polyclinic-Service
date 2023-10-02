@@ -1,3 +1,3 @@
-﻿namespace Database.Flags;
+﻿namespace Flags;
 
 public interface IDTOConvertable { }

@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using Database.Repositories;
+﻿using Database.Repositories;
+using Models;
 
 namespace Database.Services;
 

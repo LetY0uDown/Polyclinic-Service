@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Linq.Expressions;
 
 namespace Database.Repositories;

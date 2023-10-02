@@ -1,4 +1,4 @@
-﻿using Database.Flags;
+﻿using Flags;
 using System.Linq.Expressions;
 
 namespace Database.Repositories;
@@ -12,7 +12,7 @@ public interface IRepository<T> where T : IEntityModel
     /// <summary>
     /// </summary>
     /// <returns>Все записи из соответствующей таблицы БД</returns>
-    Task<List<T>> GetAllAsync();
+    Task<List<T>> GetAllAsync ();
 
     /// <summary>
     /// Добавляет запись в таблицу БД

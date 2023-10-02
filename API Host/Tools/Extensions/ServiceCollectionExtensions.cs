@@ -1,7 +1,6 @@
 ﻿using API_Host.Services;
 using API_Host.Services.Interfaces;
 using Database;
-using Database.Models;
 using Database.Repositories;
 using Database.Services;
 using HashidsNet;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Models;
 using System.Text;
 
 namespace API_Host.Tools.Extensions;
@@ -114,7 +114,8 @@ internal static class ServiceCollectionExtensions
 
         services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                                                                             .RequireAuthenticatedUser()
-        
+                                                                            .Build());
+
         return services;
     }
 

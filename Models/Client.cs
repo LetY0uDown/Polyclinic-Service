@@ -1,8 +1,10 @@
-﻿namespace API_Host.Models;
+﻿using Flags;
 
-public class Client
+namespace Models;
+
+public class Client : IEntityModel, IDTOConvertable
 {
-    public Guid ID { get; set; }
+    public int ID { get; set; }
 
     public string Password { get; set; } = null!;
 
@@ -10,9 +12,9 @@ public class Client
 
     public string? Name { get; set; }
 
-    public string? SecondName { get; set; }
+    public string? Patronymic { get; set; }
 
     public string? LastName { get; set; }
 
-    public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+    public List<Schedule> Schedules { get; set; } = new List<Schedule>();
 }

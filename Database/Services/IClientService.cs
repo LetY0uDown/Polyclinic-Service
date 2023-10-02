@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using Database.Repositories;
+﻿using Database.Repositories;
+using Models;
 
 namespace Database.Services;
 
@@ -13,7 +13,7 @@ public interface IClientService
     /// </summary>
     /// <param name="email"></param>
     /// <returns>Найденного клиента или null</returns>
-    Task<Client?> FindByEmailAsync(string email);
-    
+    Task<Client?> FindByEmailAsync (string email);
+
     IRepository<Client> Repository { get; }
 }

@@ -1,6 +1,8 @@
-﻿namespace API_Host.Models;
+﻿using Flags;
 
-public class ScheduleStatus
+namespace Models;
+
+public class ScheduleStatus : IEntityModel
 {
     public int ID { get; set; }
 

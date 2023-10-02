@@ -1,9 +1,9 @@
 ﻿using API_Host.Services.Interfaces;
-using Database.Models;
 using Database.Services;
 using DTO.Auth;
 using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace API_Host.Controllers;
 

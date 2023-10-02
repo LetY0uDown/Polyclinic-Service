@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using HashidsNet;
+﻿using HashidsNet;
+using Models;
 
 namespace API_Host.Services;
 

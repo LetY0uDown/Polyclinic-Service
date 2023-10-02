@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Linq.Expressions;
 
 namespace Database.Repositories;
@@ -15,19 +15,19 @@ public sealed class SpecialityRepository : IRepository<Speciality>
 
     public async Task<Speciality> AddAsync (Speciality entity)
     {
-        await _context.Specialities.AddAsync (entity);
+        await _context.Specialities.AddAsync(entity);
         await _context.SaveChangesAsync();
         return entity;
     }
 
     public async Task<bool> AnyAsync (Expression<Func<Speciality, bool>> func)
     {
-        return await _context.Specialities.AnyAsync (func);
+        return await _context.Specialities.AnyAsync(func);
     }
 
     public async Task DeleteAsync (Speciality entity)
     {
-        _context.Specialities.Entry (entity).State = EntityState.Deleted;
+        _context.Specialities.Entry(entity).State = EntityState.Deleted;
         await _context.SaveChangesAsync();
     }
 
@@ -40,14 +40,14 @@ public sealed class SpecialityRepository : IRepository<Speciality>
     {
         return await _context.Specialities
                              .Include(s => s.Doctors)
-                             .FirstOrDefaultAsync (func);
+                             .FirstOrDefaultAsync(func);
     }
 
     public async Task<List<Speciality>> GetAllAsync ()
     {
         return await _context.Specialities
                              .Include(s => s.Doctors)
-                             .ToListAsync ();
+                             .ToListAsync();
     }
 
     public async Task UpdateAsync (Speciality entity)
@@ -58,6 +58,6 @@ public sealed class SpecialityRepository : IRepository<Speciality>
 
     public async Task<List<Speciality>> WhereAsync (Expression<Func<Speciality, bool>> func)
     {
-        return await _context.Specialities.Where (func).ToListAsync();
+        return await _context.Specialities.Where(func).ToListAsync();
     }
 }

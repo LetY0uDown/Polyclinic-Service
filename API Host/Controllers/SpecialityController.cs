@@ -1,10 +1,9 @@
 ﻿using API_Host.Services;
-using Database.Models;
 using Database.Repositories;
 using DTO;
 using HashidsNet;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 
 namespace API_Host.Controllers;
 

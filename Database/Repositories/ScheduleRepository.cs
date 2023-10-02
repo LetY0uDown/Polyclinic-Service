@@ -1,5 +1,5 @@
-﻿using Database.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Linq.Expressions;
 
 namespace Database.Repositories;
@@ -15,8 +15,8 @@ public sealed class ScheduleRepository : IRepository<Schedule>
 
     public async Task<Schedule> AddAsync (Schedule entity)
     {
-        await _context.Schedules.AddAsync (entity);
-        await _context.SaveChangesAsync ();
+        await _context.Schedules.AddAsync(entity);
+        await _context.SaveChangesAsync();
         return entity;
     }
 
@@ -25,13 +25,13 @@ public sealed class ScheduleRepository : IRepository<Schedule>
         return _context.Schedules.Include(s => s.Client)
                                  .Include(s => s.Doctor)
                                  .Include(s => s.Status)
-                                 .AnyAsync (func);
+                                 .AnyAsync(func);
     }
 
     public async Task DeleteAsync (Schedule entity)
     {
         _context.Schedules.Entry(entity).State = EntityState.Deleted;
-        await _context.SaveChangesAsync ();
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Schedule?> FindAsync (int id)
@@ -41,10 +41,10 @@ public sealed class ScheduleRepository : IRepository<Schedule>
 
     public Task<Schedule?> FirstOrDefaultAsync (Expression<Func<Schedule, bool>> func)
     {
-       return _context.Schedules.Include(s => s.Client)
-                                .Include(s => s.Doctor)
-                                .Include(s => s.Status)
-                                .FirstOrDefaultAsync(func);
+        return _context.Schedules.Include(s => s.Client)
+                                 .Include(s => s.Doctor)
+                                 .Include(s => s.Status)
+                                 .FirstOrDefaultAsync(func);
     }
 
     public Task<List<Schedule>> GetAllAsync ()
@@ -52,7 +52,7 @@ public sealed class ScheduleRepository : IRepository<Schedule>
         return _context.Schedules.Include(s => s.Client)
                                  .Include(s => s.Doctor)
                                  .Include(s => s.Status)
-                                 .ToListAsync ();
+                                 .ToListAsync();
     }
 
     public async Task UpdateAsync (Schedule entity)

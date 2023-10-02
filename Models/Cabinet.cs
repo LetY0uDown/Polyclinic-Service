@@ -1,6 +1,8 @@
-﻿namespace API_Host.Models;
+﻿using Flags;
 
-public class Cabinet
+namespace Models;
+
+public class Cabinet : IEntityModel
 {
     public int Number { get; set; }
 }
