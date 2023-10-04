@@ -28,7 +28,7 @@ public class PolyclinicContext : DbContext
     public virtual DbSet<Speciality> Specialities { get; set; }
 
     protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:Home"]);
+        => optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:College"]);
 
     protected override void OnModelCreating (ModelBuilder modelBuilder)
     {

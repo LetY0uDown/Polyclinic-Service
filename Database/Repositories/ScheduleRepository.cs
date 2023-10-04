@@ -65,6 +65,7 @@ public sealed class ScheduleRepository : IRepository<Schedule>
     {
         return _context.Schedules.Include(s => s.Client)
                                  .Include(s => s.Doctor)
+                                 .ThenInclude(d => d.Speciality)
                                  .Include(s => s.Status)
                                  .Where(func)
                                  .ToListAsync();

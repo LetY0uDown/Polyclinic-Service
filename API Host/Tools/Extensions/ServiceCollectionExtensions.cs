@@ -45,6 +45,7 @@ internal static class ServiceCollectionExtensions
         services.AddScoped<IRepository<Speciality>, SpecialityRepository>();
 
         services.AddScoped<IRepository<Schedule>, ScheduleRepository>();
+        services.AddScoped<IScheduleService, ScheduleService>();
 
         return services;
     }
