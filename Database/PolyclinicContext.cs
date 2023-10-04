@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Database.Tools;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Models;
 
@@ -28,7 +29,7 @@ public class PolyclinicContext : DbContext
     public virtual DbSet<Speciality> Specialities { get; set; }
 
     protected override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:College"]);
+        => optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:Home"]);
 
     protected override void OnModelCreating (ModelBuilder modelBuilder)
     {
@@ -49,6 +50,7 @@ public class PolyclinicContext : DbContext
                   .IsFixedLength()
                   .HasColumnName("ID");
 
+            entity.Property(e => e.Login).HasMaxLength(25);
             entity.Property(e => e.Email).HasMaxLength(50);
             entity.Property(e => e.LastName).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
@@ -132,46 +134,6 @@ public class PolyclinicContext : DbContext
                   .HasColumnName("Title");
         });
 
-        SeedData(modelBuilder);
-    }
-
-    /// <summary>
-    /// Заполняет БД начальными данными, если их там ещё нет.
-    /// Вообще обычно выносится в отдельный класс, но мне чёт лень. Может позже
-    /// </summary>
-    /// <param name="modelBuilder"></param>
-    private static void SeedData (ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Speciality>().HasData(new Speciality() {
-            ID = 1,
-            Title = "Хирург"
-        }, new Speciality() {
-            ID = 2,
-            Title = "Стоматолог"
-        }, new Speciality() {
-            ID = 3,
-            Title = "Терапевт"
-        });
-
-        modelBuilder.Entity<Cabinet>().HasData(new Cabinet() {
-            Number = 41
-        }, new Cabinet() {
-            Number = 62
-        }, new Cabinet() {
-            Number = 12
-        }, new Cabinet() {
-            Number = 1
-        });
-
-        modelBuilder.Entity<ScheduleStatus>().HasData(new ScheduleStatus() {
-            ID = 1,
-            Status = "Ожидание приёма"
-        }, new ScheduleStatus() {
-            ID = 2,
-            Status = "Приём оказан"
-        }, new ScheduleStatus() {
-            ID = 3,
-            Status = "Приём не оказан"
-        });
+        DBSeeder.SeedData(modelBuilder);
     }
 }

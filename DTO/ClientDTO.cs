@@ -6,6 +6,9 @@ public class ClientDTO : DTO
 {
     public string ID { get; set; } = string.Empty;
 
+    [RegularExpression("^[A-Za-z0-9_-]{5,25}$", ErrorMessage = "Логин задан неправильно")]
+    public string Login { get; init; } = string.Empty;
+
     [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,10}$", ErrorMessage = "Неверный E-Mail")]
     public string Email { get; init; } = string.Empty;
 

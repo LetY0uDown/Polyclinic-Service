@@ -26,10 +26,10 @@ public sealed class AuthController : ControllerBase
     [HttpPost("Login")]
     public async Task<ActionResult<AuthorizationData>> AuthorizeClient ([FromBody] LoginData data)
     {
-        var client = await _clientService.FindByEmailAsync(data.EMail);
+        var (client, error) = await _clientService.FindByDataAsync(data.EMail, data.Login);
 
         if (client is null) {
-            return NotFound("Аккаунта с таким E-Mail адресом не существует. Проверьте правильность ввода или зарегистрируйтесь.");
+            return NotFound(error);
         }
 
         var hashedPass = _hasher.Hash(data.Password);
@@ -46,11 +46,14 @@ public sealed class AuthController : ControllerBase
     [HttpPost("Register")]
     public async Task<ActionResult<AuthorizationData>> RegisterClient ([FromBody] LoginData data)
     {
-        if (await _clientService.Repository.AnyAsync(c => c.Email == data.EMail)) {
-            return BadRequest("Данная электронная почта уже зарегистрирована в системе. Попробуйте ввести другую, или восстановить пароль к вашей учётной записи.");
+        var (clientExist, error) = await _clientService.CheckIfClientExistAsync(data.EMail, data.Login);
+
+        if (clientExist) {
+            return BadRequest(error);
         }
 
         var client = new Client {
+            Login = data.Login,
             Email = data.EMail,
             Password = _hasher.Hash(data.Password)
         };

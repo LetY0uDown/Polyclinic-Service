@@ -27,6 +27,7 @@ public sealed class DTOConverter
 
         return new() {
             ID = _hashIDs.Encode(client.ID),
+            Login = client.Login,
             Email = client.Email,
             Name = client.Name,
             Patronymic = client.Patronymic,

@@ -1,5 +1,6 @@
 ﻿using API_Host.Services;
 using Database.Services;
+using DTO;
 using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -21,9 +22,9 @@ public sealed class ClientsController : ControllerBase
         _dtoConverter = dtoConverter;
     }
 
-    [HttpPut("{hashid:hashid}")]
-    public async Task<ActionResult> UpdateClientData ([FromRoute] string id,
-                                                      [FromBody] DTO.ClientDTO clientData)
+    [HttpPut("{id:hashid}")]
+    public async Task<ActionResult<ClientDTO>> UpdateClientData ([FromRoute] string id,
+                                                                 [FromBody] ClientDTO clientData)
     {
         if (id != clientData.ID) {
             return BadRequest("Какую-то фигню ты прислал");
@@ -41,11 +42,11 @@ public sealed class ClientsController : ControllerBase
 
         await _clientService.Repository.UpdateAsync(client);
 
-        return NoContent();
+        return Ok(_dtoConverter.ConvertClient(client));
     }
 
-    [HttpGet("{hashid:hashid}")]
-    public async Task<ActionResult<DTO.ClientDTO>> GetClient ([FromRoute] string id)
+    [HttpGet("{id:hashid}")]
+    public async Task<ActionResult<ClientDTO>> GetClient ([FromRoute] string id)
     {
         var client = await GetClientOrNull(id);
 

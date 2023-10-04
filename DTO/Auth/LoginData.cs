@@ -2,13 +2,17 @@
 
 namespace DTO.Auth;
 
-public record class LoginData
+public sealed record class LoginData
 {
-    public LoginData (string eMail, string password)
+    public LoginData (string eMail, string password, string login)
     {
         EMail = eMail;
         Password = password;
+        Login = login;
     }
+
+    [RegularExpression("^[A-Za-z0-9_-]{5,25}$", ErrorMessage = "Логин задан неправильно")]
+    public string Login { get; private init; } = string.Empty;
 
     [RegularExpression("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,10}$", ErrorMessage = "Неверный E-Mail")]
     public string EMail { get; private init; } = string.Empty;
