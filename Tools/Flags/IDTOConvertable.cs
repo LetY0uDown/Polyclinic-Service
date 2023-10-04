@@ -1,3 +1,3 @@
-﻿namespace Flags;
+﻿namespace Tools.Flags;
 
 public interface IDTOConvertable { }
