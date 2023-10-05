@@ -1,7 +1,6 @@
 ﻿using API_Host.Services;
 using Database.Repositories;
 using DTO;
-using HashidsNet;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -10,13 +9,11 @@ namespace API_Host.Controllers;
 [ApiController, Route("[controller]/")]
 public sealed class DoctorsController : ControllerBase
 {
-    private readonly IHashids _hashids;
     private readonly IRepository<Doctor> _repository;
     private readonly DTOConverter _converter;
 
-    public DoctorsController (IHashids hashids, IRepository<Doctor> repository, DTOConverter converter)
+    public DoctorsController (IRepository<Doctor> repository, DTOConverter converter)
     {
-        _hashids = hashids;
         _repository = repository;
         _converter = converter;
     }
@@ -29,10 +26,10 @@ public sealed class DoctorsController : ControllerBase
         return Ok(doctors.Select(_converter.ConvertDoctor));
     }
 
-    [HttpGet("{id:hashid}")]
-    public async Task<ActionResult<DoctorDTO>> GetDoctorByID ([FromRoute] string id)
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<DoctorDTO>> GetDoctorByID ([FromRoute] Guid id)
     {
-        var doctor = await GetDoctorOrNull(id);
+        var doctor = await _repository.FindAsync(id);
 
         if (doctor is null) {
             return NotFound("Доктор не найден");
@@ -41,26 +38,11 @@ public sealed class DoctorsController : ControllerBase
         return Ok(_converter.ConvertDoctor(doctor));
     }
 
-    [HttpGet("Speciality/{id:hashid}")]
-    public async Task<ActionResult<List<Doctor>>> GetDoctorsBySpeciality ([FromRoute] string id)
+    [HttpGet("Speciality/{specID:guid}")]
+    public async Task<ActionResult<List<Doctor>>> GetDoctorsBySpeciality ([FromRoute] Guid specID)
     {
-        var rawID = _hashids.Decode(id);
-        if (rawID.Length == 0) {
-            return NotFound();
-        }
-
-        var doctors = await _repository.WhereAsync(d => d.SpecialityId == rawID[0]);
+        var doctors = await _repository.WhereAsync(d => d.SpecialityId == specID);
 
         return Ok(doctors.Select(_converter.ConvertDoctor));
-    }
-
-    private async Task<Doctor?> GetDoctorOrNull (string id)
-    {
-        var rawID = _hashids.Decode(id);
-        if (rawID.Length == 0) {
-            return null;
-        }
-
-        return await _repository.FindAsync(rawID[0]);
     }
 }

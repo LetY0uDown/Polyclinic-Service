@@ -1,26 +1,18 @@
-﻿using API_Host.Services.Interfaces;
-using Database.Services;
-using DTO.Auth;
-using HashidsNet;
+﻿using Database.Services;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Tools.Auth;
 
 namespace API_Host.Controllers;
 
 [ApiController, Route("[controller]/")]
 public sealed class AuthController : ControllerBase
 {
-    private readonly IStringHasher _hasher;
-
     private readonly IClientService _clientService;
-    private readonly IHashids _hashids;
 
-    public AuthController (IStringHasher hasher,
-                           IClientService clientService, IHashids hashids)
+    public AuthController (IClientService clientService)
     {
-        _hasher = hasher;
         _clientService = clientService;
-        _hashids = hashids;
     }
 
     [HttpPost("Login")]
@@ -32,13 +24,13 @@ public sealed class AuthController : ControllerBase
             return NotFound(error);
         }
 
-        var hashedPass = _hasher.Hash(data.Password);
+        var hashedPass = _clientService.HashPassword(data.Password);
 
         if (client.Password != hashedPass) {
             return Unauthorized("Неверный пароль. Попробуйте ввести его ещё раз, или восстановить доступ к вашей учётной записи.");
         }
 
-        var auth = new AuthorizationData(_hashids.Encode(client.ID));
+        var auth = new AuthorizationData(client.ID.ToString());
 
         return Ok(auth);
     }
@@ -55,12 +47,12 @@ public sealed class AuthController : ControllerBase
         var client = new Client {
             Login = data.Login,
             Email = data.EMail,
-            Password = _hasher.Hash(data.Password)
+            Password = _clientService.HashPassword(data.Password)
         };
 
         await _clientService.Repository.AddAsync(client);
 
-        var auth = new AuthorizationData(_hashids.Encode(client.ID));
+        var auth = new AuthorizationData(client.ID.ToString());
 
         return Ok(auth);
     }

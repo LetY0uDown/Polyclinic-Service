@@ -31,9 +31,9 @@ public sealed class ClientRepository : IRepository<Client>
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Client?> FindAsync (int id)
+    public async Task<Client?> FindAsync (object id)
     {
-        return await FirstOrDefaultAsync(c => c.ID == id);
+        return await FirstOrDefaultAsync(c => c.ID == (Guid)id);
     }
 
     public async Task<Client?> FirstOrDefaultAsync (Expression<Func<Client, bool>> func)

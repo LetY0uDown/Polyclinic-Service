@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace DTO;
 
-public class ClientDTO : DTO
+public class ClientDTO : Tools.Flags.DTO
 {
-    public string ID { get; set; } = string.Empty;
+    public ClientID ID { get; set; }
 
     [RegularExpression("^[A-Za-z0-9_-]{5,25}$", ErrorMessage = "Логин задан неправильно")]
     public string Login { get; init; } = string.Empty;

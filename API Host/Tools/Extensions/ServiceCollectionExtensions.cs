@@ -1,15 +1,17 @@
 ﻿using API_Host.Services;
-using API_Host.Services.Interfaces;
+using API_Host.Services.Database;
 using Database;
 using Database.Repositories;
 using Database.Services;
-using HashidsNet;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Models;
 using System.Text;
+using Tools;
+using Tools.Services;
+using Tools.Services.Interfaces;
 
 namespace API_Host.Tools.Extensions;
 
@@ -22,7 +24,6 @@ internal static class ServiceCollectionExtensions
     {
         services.AddTransient<IStringHasher, StringHasher>();
         services.AddTransient<JWTTokenGenerator>();
-        services.AddSingleton<IHashids>(_ => new Hashids(config["Salt:IDs"], 8));
         services.AddSingleton<DTOConverter>();
 
         return services;
@@ -35,7 +36,7 @@ internal static class ServiceCollectionExtensions
     /// <returns></returns>
     internal static IServiceCollection AddDatabase (this IServiceCollection services)
     {
-        services.AddDbContext<PolyclinicContext>();
+        services.AddDbContext<PolyclinicContext, PolyclinicContextHome>();
 
         services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IClientService, ClientService>();
@@ -116,14 +117,6 @@ internal static class ServiceCollectionExtensions
         services.AddAuthorization(options => options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                                                                             .RequireAuthenticatedUser()
                                                                             .Build());
-
-        return services;
-    }
-
-    internal static IServiceCollection AddRouteConstraints (this IServiceCollection services)
-    {
-        services.AddRouting(options =>
-            options.ConstraintMap.Add("hashid", typeof(HashIDConstraint)));
 
         return services;
     }

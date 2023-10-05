@@ -1,4 +1,4 @@
-﻿namespace DTO;
+﻿namespace Tools.Flags;
 
 /// <summary>
 /// Класс, определяющий, что любой класс, которые его наследует, является DTO

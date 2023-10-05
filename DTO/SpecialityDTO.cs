@@ -1,8 +1,10 @@
-﻿namespace DTO;
+﻿using Models;
 
-public class SpecialityDTO : DTO
+namespace DTO;
+
+public class SpecialityDTO : Tools.Flags.DTO
 {
-    public string ID { get; set; } = string.Empty;
+    public SpecialityID ID { get; set; }
 
     public string Title { get; init; } = string.Empty;
 

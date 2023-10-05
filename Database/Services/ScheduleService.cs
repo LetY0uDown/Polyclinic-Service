@@ -12,7 +12,7 @@ public sealed class ScheduleService : IScheduleService
 
     public IRepository<Schedule> Repository { get; }
 
-    public async Task GenerateScheduleAsync(DateTime start, int doctorID)
+    public async Task GenerateScheduleAsync(DateTime start, DoctorID doctorID)
     {
         start = new DateTime(start.Year, start.Month, start.Day, 7, 0, 0);
 
@@ -35,7 +35,7 @@ public sealed class ScheduleService : IScheduleService
         }
     }
 
-    public async Task<List<Schedule>> GetScheduleForDoctor(int doctorID, DateTime start, DateTime finish)
+    public async Task<List<Schedule>> GetScheduleForDoctor(DoctorID doctorID, DateTime start, DateTime finish)
     {
         return await Repository.WhereAsync(s => s.DoctorId == doctorID);
     }

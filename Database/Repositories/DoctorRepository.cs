@@ -31,9 +31,9 @@ public sealed class DoctorRepository : IRepository<Doctor>
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Doctor?> FindAsync (int id)
+    public async Task<Doctor?> FindAsync (object id)
     {
-        return await FirstOrDefaultAsync(d => d.ID == id);
+        return await FirstOrDefaultAsync(d => d.ID == (Guid)id);
     }
 
     public async Task<Doctor?> FirstOrDefaultAsync (Expression<Func<Doctor, bool>> func)

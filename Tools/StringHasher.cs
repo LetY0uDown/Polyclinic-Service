@@ -1,27 +1,21 @@
-﻿using API_Host.Services.Interfaces;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using System;
 using System.Text;
+using Tools.Services.Interfaces;
 
-namespace API_Host.Services;
+namespace Tools.Services;
 
 /// <summary>
 /// Класс, который реализует интерфейс для шифрования строк
 /// </summary>
 public sealed class StringHasher : IStringHasher
 {
-    private readonly IConfiguration _configuration;
-
-    public StringHasher (IConfiguration configuration)
+    public string Hash (string value, string salt)
     {
-        _configuration = configuration;
-    }
-
-    public string Hash (string str)
-    {
-        var saltBytes = Encoding.UTF8.GetBytes(_configuration["Salt:Password"]!);
+        var saltBytes = Encoding.UTF8.GetBytes(salt);
 
         var hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                        password: str,
+                        password: value,
                         salt: saltBytes,
                         prf: KeyDerivationPrf.HMACSHA256,
                         iterationCount: 100000,

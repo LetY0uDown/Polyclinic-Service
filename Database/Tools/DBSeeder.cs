@@ -11,54 +11,66 @@ internal static class DBSeeder
     /// <param name="modelBuilder">Ссылка на modelBuilder который, собственно, записывает данные</param>
     internal static void SeedData (ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Speciality>().HasData(new Speciality() {
-            ID = 1,
+        modelBuilder.Entity<Speciality>().HasData(GetSpecialities());
+
+        modelBuilder.Entity<Cabinet>().HasData(GetCabinets());
+
+        modelBuilder.Entity<ScheduleStatus>().HasData(GetScheduleStatuses());
+
+        modelBuilder.Entity<Doctor>().HasData(GetDoctors());
+    }
+
+    private static Speciality[] GetSpecialities ()
+    {
+        return new Speciality[] {
+            new Speciality() {
+            ID  = Guid.NewGuid(),
             Title = "Хирург"
         }, new Speciality() {
-            ID = 2,
+            ID  = Guid.NewGuid(),
             Title = "Стоматолог"
         }, new Speciality() {
-            ID = 3,
+            ID  = Guid.NewGuid(),
             Title = "Терапевт"
         }, new Speciality() {
-            ID = 4,
+            ID  = Guid.NewGuid(),
             Title = "Практолог"
-        });
+        }};
+    }
 
-        modelBuilder.Entity<Doctor>().HasData(new Doctor() {
-            ID = 1,
+    private static Doctor[] GetDoctors()
+    {
+        var specialities = GetSpecialities();
+        
+        return new Doctor[] {
+            new Doctor() {
+            ID  = Guid.NewGuid(),
             Name = "Акакий",
             LastName = "Акакьев",
             Patronymic = "Акакиевич",
-            SpecialityId = 4,
+            SpecialityId = specialities[3].ID,
             CabinetNumber = 69
         }, new Doctor() {
-            ID = 2,
+            ID  = Guid.NewGuid(),
             Name = "Ольга",
             LastName = "Иванова",
             Patronymic = "Викторовна",
-            SpecialityId = 2,
+            SpecialityId = specialities[1].ID,
             CabinetNumber = 12
         }, new Doctor() {
-            ID = 3,
+            ID  = Guid.NewGuid(),
             Name = "Евгений",
             LastName = "Смирнов",
             Patronymic = "Олегович",
-            SpecialityId = 1,
+            SpecialityId = specialities[0].ID,
             CabinetNumber = 2
-        });
+        }};
+    }
 
-        modelBuilder.Entity<Cabinet>().HasData(new Cabinet() {
-            Number = 2
-        }, new Cabinet() {
-            Number = 62
-        }, new Cabinet() {
-            Number = 12
-        }, new Cabinet() {
-            Number = 69
-        });
-
-        modelBuilder.Entity<ScheduleStatus>().HasData(new ScheduleStatus() {
+    private static ScheduleStatus[] GetScheduleStatuses ()
+    {
+        return new ScheduleStatus[] {
+            new ScheduleStatus() {
             ID = 1,
             Status = "Ожидание приёма"
         }, new ScheduleStatus() {
@@ -67,6 +79,20 @@ internal static class DBSeeder
         }, new ScheduleStatus() {
             ID = 3,
             Status = "Приём не оказан"
-        });
+        }};
+    }
+
+    private static Cabinet[] GetCabinets ()
+    {
+        return new Cabinet[] {
+            new Cabinet() {
+            Number = 2
+        }, new Cabinet() {
+            Number = 62
+        }, new Cabinet() {
+            Number = 12
+        }, new Cabinet() {
+            Number = 69
+        }};
     }
 }

@@ -1,14 +1,21 @@
 ﻿using Database.Repositories;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Tools;
+using Tools.Services.Interfaces;
 
 namespace Database.Services;
 
 public sealed class ClientService : IClientService
 {
-    public ClientService (IRepository<Client> repository)
+    private readonly IStringHasher _stringHasher;
+    private readonly IConfiguration _config;
+
+    public ClientService (IRepository<Client> repository, IStringHasher stringHasher, IConfiguration config)
     {
         Repository = repository;
+        _stringHasher = stringHasher;
+        _config = config;
     }
 
     public IRepository<Client> Repository { get; init; }
@@ -39,5 +46,10 @@ public sealed class ClientService : IClientService
         }
 
         return new(client);
+    }
+
+    public string HashPassword (string password)
+    {
+        return _stringHasher.Hash(password, _config["Salt:Password"]!);
     }
 }

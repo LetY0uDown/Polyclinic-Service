@@ -1,5 +1,4 @@
-﻿using HashidsNet;
-using Models;
+﻿using Models;
 
 namespace API_Host.Services;
 
@@ -8,13 +7,6 @@ namespace API_Host.Services;
 /// </summary>
 public sealed class DTOConverter
 {
-    private readonly IHashids _hashIDs;
-
-    public DTOConverter (IHashids hashIDs)
-    {
-        _hashIDs = hashIDs;
-    }
-
     /// <summary>
     /// Конвертирует объект из БД в DTO для отправки клиенту с сервера
     /// </summary>
@@ -26,7 +18,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = _hashIDs.Encode(client.ID),
+            ID = client.ID,
             Login = client.Login,
             Email = client.Email,
             Name = client.Name,
@@ -48,12 +40,12 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = _hashIDs.Encode(doctor.ID),
+            ID = doctor.ID,
             Name = doctor.Name,
             Patronymic = doctor.Patronymic,
             LastName = doctor.LastName,
-            CabinetNumber = doctor.CabinetNumber ?? 0,
-            SpecialityID = _hashIDs.Encode(doctor.SpecialityId ?? 0),
+            CabinetNumber = doctor.CabinetNumber,
+            SpecialityID = doctor.SpecialityId,
             SpecialityTitle = doctor.Speciality?.Title
         };
     }
@@ -69,7 +61,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = _hashIDs.Encode(schedule.ID),
+            ID = schedule.ID,
             Date = schedule.Date,
             Status = schedule.Status?.Status,
             Doctor = ConvertDoctor(schedule.Doctor!),
@@ -88,7 +80,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = _hashIDs.Encode(speciality.ID),
+            ID = speciality.ID,
             Title = speciality.Title,
             Doctors = speciality.Doctors.Select(ConvertDoctor).ToList()
         };

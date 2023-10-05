@@ -9,6 +9,8 @@ namespace Database.Services;
 /// </summary>
 public interface IClientService
 {
+    string HashPassword (string password);
+
     /// <summary>
     /// Ищеть в БД клиента по его электронной почте и логину
     /// </summary>

@@ -1,8 +1,10 @@
-﻿namespace DTO;
+﻿using Models;
 
-public class ScheduleDTO : DTO
+namespace DTO;
+
+public class ScheduleDTO : Tools.Flags.DTO
 {
-    public string ID { get; set; } = string.Empty;
+    public ScheduleID ID { get; set; }
 
     public DateTime Date { get; init; }
 

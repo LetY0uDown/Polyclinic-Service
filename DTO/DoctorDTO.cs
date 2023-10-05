@@ -1,8 +1,10 @@
-﻿namespace DTO;
+﻿using Models;
 
-public class DoctorDTO : DTO
+namespace DTO;
+
+public class DoctorDTO : Tools.Flags.DTO
 {
-    public string ID { get; set; } = string.Empty;
+    public DoctorID ID { get; set; }
 
     public string Name { get; init; } = string.Empty;
 
@@ -10,9 +12,9 @@ public class DoctorDTO : DTO
 
     public string LastName { get; init; } = string.Empty;
 
-    public int CabinetNumber { get; init; }
+    public CabinetNumber CabinetNumber { get; init; }
 
-    public string? SpecialityID { get; init; } = string.Empty;  
+    public SpecialityID? SpecialityID { get; init; } = default;
 
     public string? SpecialityTitle { get; init; } = string.Empty;
 }

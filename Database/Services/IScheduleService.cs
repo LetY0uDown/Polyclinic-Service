@@ -7,7 +7,7 @@ public interface IScheduleService
 {
     IRepository<Schedule> Repository { get; }
 
-    Task GenerateScheduleAsync(DateTime start, int doctorID);
+    Task GenerateScheduleAsync(DateTime start, DoctorID doctorID);
 
-    Task<List<Schedule>> GetScheduleForDoctor(int doctorID, DateTime start, DateTime finish);
+    Task<List<Schedule>> GetScheduleForDoctor(DoctorID doctorID, DateTime start, DateTime finish);
 }

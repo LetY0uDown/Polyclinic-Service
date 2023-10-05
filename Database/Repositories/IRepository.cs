@@ -1,5 +1,5 @@
-﻿using Tools.Flags;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Tools.Flags;
 
 namespace Database.Repositories;
 
@@ -40,7 +40,7 @@ public interface IRepository<T> where T : IEntityModel
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Найденную запись или null</returns>
-    Task<T?> FindAsync (int id);
+    Task<T?> FindAsync (object id);
 
     /// <summary>
     /// 
