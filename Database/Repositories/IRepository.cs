@@ -34,14 +34,7 @@ public interface IRepository<T> where T : IEntityModel
     /// <param name="entity"></param>
     /// <returns></returns>
     Task DeleteAsync (T entity);
-
-    /// <summary>
-    /// Находит запись в таблице БД по её ID
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns>Найденную запись или null</returns>
-    Task<T?> FindAsync (object id);
-
+    
     /// <summary>
     /// 
     /// </summary>

@@ -33,6 +33,11 @@ public sealed class ClientService : IClientService
         return new(false);
     }
 
+    public async Task<Client?> FindAsync (ClientID id)
+    {
+        return await Repository.FirstOrDefaultAsync(c => c.ID == id);
+    }
+
     public async Task<DataErrorUnion<Client>> FindByDataAsync (string email, string login)
     {
         var client = await Repository.FirstOrDefaultAsync(c => c.Login == login);

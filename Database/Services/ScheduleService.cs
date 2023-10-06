@@ -12,6 +12,11 @@ public sealed class ScheduleService : IScheduleService
 
     public IRepository<Schedule> Repository { get; }
 
+    public async Task<Schedule?> FindAsync (ScheduleID id)
+    {
+        return await Repository.FirstOrDefaultAsync(s => s.ID == id);
+    }
+
     public async Task GenerateScheduleAsync(DateTime start, DoctorID doctorID)
     {
         start = new DateTime(start.Year, start.Month, start.Day, 7, 0, 0);

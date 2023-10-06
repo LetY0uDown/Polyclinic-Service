@@ -1,8 +1,7 @@
 ﻿using API_Host.Services;
-using Database.Repositories;
+using Database.Services;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 
 namespace API_Host.Controllers;
 
@@ -10,18 +9,18 @@ namespace API_Host.Controllers;
 public class SpecialityController : ControllerBase
 {
     private readonly DTOConverter _converter;
-    private readonly IRepository<Speciality> _repository;
+    private readonly ISpecialityService _specialityService;
 
-    public SpecialityController (IRepository<Speciality> repository, DTOConverter converter)
+    public SpecialityController (DTOConverter converter, ISpecialityService specialityService)
     {
-        _repository = repository;
         _converter = converter;
+        _specialityService = specialityService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<SpecialityDTO>>> GetSpecialities ()
     {
-        var specs = await _repository.GetAllAsync();
+        var specs = await _specialityService.Repository.GetAllAsync();
 
         return Ok(specs.Select(_converter.ConvertSpeciality));
     }
@@ -29,7 +28,7 @@ public class SpecialityController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<SpecialityDTO>> GetSpecialityByID ([FromRoute] Guid id)
     {
-        var speciality = await _repository.FindAsync(id);
+        var speciality = await _specialityService.FindAsync(id);
 
         if (speciality is null) {
             return NotFound("Специальность не найдена");

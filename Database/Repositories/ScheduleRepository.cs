@@ -34,11 +34,6 @@ public sealed class ScheduleRepository : IRepository<Schedule>
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Schedule?> FindAsync (object id)
-    {
-        return await FirstOrDefaultAsync(s => s.ID == (Guid)id);
-    }
-
     public Task<Schedule?> FirstOrDefaultAsync (Expression<Func<Schedule, bool>> func)
     {
         return _context.Schedules.Include(s => s.Client)

@@ -26,7 +26,7 @@ public sealed class ClientsController : ControllerBase
             return BadRequest("Какую-то фигню ты прислал");
         }
 
-        var client = await _clientService.Repository.FindAsync(id);
+        var client = await _clientService.FindAsync(id);
 
         if (client is null) {
             return NotFound("Ошибка.Данные не найдены D:");
@@ -44,7 +44,7 @@ public sealed class ClientsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<ClientDTO>> GetClient ([FromRoute] Guid id)
     {
-        var client = await _clientService.Repository.FindAsync(id);
+        var client = await _clientService.FindAsync(id);
 
         if (client is null) {
             return NotFound("Ошибка.Данные не найдены D:");

@@ -1,5 +1,5 @@
 ﻿using API_Host.Services;
-using Database.Repositories;
+using Database.Services;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -9,19 +9,19 @@ namespace API_Host.Controllers;
 [ApiController, Route("[controller]/")]
 public sealed class DoctorsController : ControllerBase
 {
-    private readonly IRepository<Doctor> _repository;
+    private readonly IDoctorService _doctorService;
     private readonly DTOConverter _converter;
 
-    public DoctorsController (IRepository<Doctor> repository, DTOConverter converter)
+    public DoctorsController (DTOConverter converter, IDoctorService doctorService)
     {
-        _repository = repository;
         _converter = converter;
+        _doctorService = doctorService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<DoctorDTO>>> GetDoctors ()
     {
-        var doctors = await _repository.GetAllAsync();
+        var doctors = await _doctorService.Repository.GetAllAsync();
 
         return Ok(doctors.Select(_converter.ConvertDoctor));
     }
@@ -29,7 +29,7 @@ public sealed class DoctorsController : ControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<DoctorDTO>> GetDoctorByID ([FromRoute] Guid id)
     {
-        var doctor = await _repository.FindAsync(id);
+        var doctor = await _doctorService.FindAsync(id);
 
         if (doctor is null) {
             return NotFound("Доктор не найден");
@@ -41,7 +41,7 @@ public sealed class DoctorsController : ControllerBase
     [HttpGet("Speciality/{specID:guid}")]
     public async Task<ActionResult<List<Doctor>>> GetDoctorsBySpeciality ([FromRoute] Guid specID)
     {
-        var doctors = await _repository.WhereAsync(d => d.SpecialityId == specID);
+        var doctors = await _doctorService.Repository.WhereAsync(d => d.SpecialityId == specID);
 
         return Ok(doctors.Select(_converter.ConvertDoctor));
     }

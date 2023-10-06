@@ -31,11 +31,6 @@ public sealed class SpecialityRepository : IRepository<Speciality>
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Speciality?> FindAsync (object id)
-    {
-        return await FirstOrDefaultAsync(s => s.ID == (Guid)id);
-    }
-
     public async Task<Speciality?> FirstOrDefaultAsync (Expression<Func<Speciality, bool>> func)
     {
         return await _context.Specialities
