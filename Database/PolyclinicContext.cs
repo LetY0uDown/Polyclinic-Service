@@ -1,26 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Database.Tools;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
+using Models.IDs;
 
 namespace Database;
 
 public abstract class PolyclinicContext : DbContext
 {
-    public virtual DbSet<Cabinet> Cabinets { get; set; }
+    public DbSet<Cabinet> Cabinets { get; set; }
 
-    public virtual DbSet<Client> Clients { get; set; }
+    public DbSet<Client> Clients { get; set; }
 
-    public virtual DbSet<Doctor> Doctors { get; set; }
+    public DbSet<Doctor> Doctors { get; set; }
 
-    public virtual DbSet<Schedule> Schedules { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
 
-    public virtual DbSet<ScheduleStatus> ScheduleStatuses { get; set; }
+    public DbSet<ScheduleStatus> ScheduleStatuses { get; set; }
 
-    public virtual DbSet<Speciality> Specialities { get; set; }
+    public DbSet<Speciality> Specialities { get; set; }
 
     protected override void OnModelCreating (ModelBuilder modelBuilder)
     {
-        #region creating converters
+        #region Creating converters for IDs
         var cabNumberConverter = new ValueConverter<CabinetNumber, int>(id => id.Value, value => new(value));
         var doctodIDConverter = new ValueConverter<DoctorID, Guid>(id => id.Value, value => new(value));
         var clientIDConverter = new ValueConverter<ClientID, Guid>(id => id.Value, value => new(value));
@@ -47,12 +49,12 @@ public abstract class PolyclinicContext : DbContext
                   .ValueGeneratedNever()
                   .HasColumnName("ID");
 
-            entity.Property(e => e.Login).HasMaxLength(25);
-            entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Password).HasMaxLength(50);
-            entity.Property(e => e.Patronymic).HasMaxLength(50);
+            entity.Property(e => e.Login)       .HasMaxLength(25);
+            entity.Property(e => e.Email)       .HasMaxLength(50);
+            entity.Property(e => e.LastName)    .HasMaxLength(50);
+            entity.Property(e => e.Name)        .HasMaxLength(50);
+            entity.Property(e => e.Password)    .HasMaxLength(50);
+            entity.Property(e => e.Patronymic)  .HasMaxLength(50);
         });
 
         modelBuilder.Entity<Doctor>(entity => {
@@ -67,9 +69,9 @@ public abstract class PolyclinicContext : DbContext
                   .ValueGeneratedNever()
                   .HasColumnName("ID");
 
-            entity.Property(e => e.LastName).HasMaxLength(50);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.Patronymic).HasMaxLength(50);
+            entity.Property(e => e.LastName)    .HasMaxLength(50);
+            entity.Property(e => e.Name)        .HasMaxLength(50);
+            entity.Property(e => e.Patronymic)  .HasMaxLength(50);
 
             entity.Property(e => e.SpecialityId)
                   .HasConversion(specialityIDConverter)
@@ -159,6 +161,6 @@ public abstract class PolyclinicContext : DbContext
                   .HasMaxLength(50);
         });
 
-        //DBSeeder.SeedData(modelBuilder);
+        DBSeeder.SeedData(modelBuilder);
     }
 }

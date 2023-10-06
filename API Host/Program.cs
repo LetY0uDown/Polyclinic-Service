@@ -6,7 +6,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(useAuthorization: false);
 builder.Services.AddDatabase();
-builder.Services.AddTools(builder.Configuration);
+builder.Services.AddTools();
 
 var app = builder.Build();
 

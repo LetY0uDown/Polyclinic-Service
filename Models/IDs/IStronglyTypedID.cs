@@ -1,4 +1,4 @@
-﻿namespace Tools;
+﻿namespace Models.IDs;
 
 public interface IStronglyTypedID<T> where T : struct
 {

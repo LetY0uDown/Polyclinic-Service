@@ -33,7 +33,7 @@ public sealed class ClientService : IClientService
         return new(false);
     }
 
-    public async Task<Client?> FindAsync (ClientID id)
+    public async Task<Client?> FindAsync (Models.IDs.ClientID id)
     {
         return await Repository.FirstOrDefaultAsync(c => c.ID == id);
     }

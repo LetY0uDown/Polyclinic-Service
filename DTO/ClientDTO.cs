@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using Models.IDs;
 using System.ComponentModel.DataAnnotations;
 
 namespace DTO;

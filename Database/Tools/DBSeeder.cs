@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.IDs;
 
 namespace Database.Tools;
 
@@ -11,59 +12,59 @@ internal static class DBSeeder
     /// <param name="modelBuilder">Ссылка на modelBuilder который, собственно, записывает данные</param>
     internal static void SeedData (ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Speciality>().HasData(GetSpecialities());
-
-        modelBuilder.Entity<Cabinet>().HasData(GetCabinets());
+        var specialities = GetSpecialities();
 
         modelBuilder.Entity<ScheduleStatus>().HasData(GetScheduleStatuses());
 
-        modelBuilder.Entity<Doctor>().HasData(GetDoctors());
+        modelBuilder.Entity<Cabinet>().HasData(GetCabinets());
+
+        modelBuilder.Entity<Speciality>().HasData(specialities);                
+
+        modelBuilder.Entity<Doctor>().HasData(GetDoctors(specialities));
     }
 
     private static Speciality[] GetSpecialities ()
     {
         return new Speciality[] {
             new Speciality() {
-            ID  = Guid.NewGuid(),
-            Title = "Хирург"
-        }, new Speciality() {
-            ID  = Guid.NewGuid(),
-            Title = "Стоматолог"
-        }, new Speciality() {
-            ID  = Guid.NewGuid(),
-            Title = "Терапевт"
-        }, new Speciality() {
-            ID  = Guid.NewGuid(),
-            Title = "Практолог"
+                ID  = SpecialityID.New(),
+                Title = "Хирург"
+        },  new Speciality() {
+                ID  = SpecialityID.New(),
+                Title = "Практолог"
+        },  new Speciality() {
+                ID  = SpecialityID.New(),
+                Title = "Стоматолог"
+        },  new Speciality() {
+                ID  = SpecialityID.New(),
+                Title = "Терапевт"
         }};
     }
 
-    private static Doctor[] GetDoctors()
+    private static Doctor[] GetDoctors(Speciality[] specialities)
     {
-        var specialities = GetSpecialities();
-        
         return new Doctor[] {
             new Doctor() {
-            ID  = Guid.NewGuid(),
-            Name = "Акакий",
-            LastName = "Акакьев",
-            Patronymic = "Акакиевич",
-            SpecialityId = specialities[3].ID,
-            CabinetNumber = 69
+                ID  = DoctorID.New(),
+                Name =          "Акакий",
+                LastName =      "Акакьев",
+                Patronymic =    "Акакиевич",
+                SpecialityId = specialities[1].ID,
+                CabinetNumber = 69
         }, new Doctor() {
-            ID  = Guid.NewGuid(),
-            Name = "Ольга",
-            LastName = "Иванова",
-            Patronymic = "Викторовна",
-            SpecialityId = specialities[1].ID,
-            CabinetNumber = 12
+                ID  = DoctorID.New(),
+                Name =          "Ольга",
+                LastName =      "Иванова",
+                Patronymic =    "Викторовна",
+                SpecialityId = specialities[2].ID,
+                CabinetNumber = 12
         }, new Doctor() {
-            ID  = Guid.NewGuid(),
-            Name = "Евгений",
-            LastName = "Смирнов",
-            Patronymic = "Олегович",
-            SpecialityId = specialities[0].ID,
-            CabinetNumber = 2
+                ID  = DoctorID.New(),
+                Name =          "Евгений",
+                LastName =      "Смирнов",
+                Patronymic =    "Олегович",
+                SpecialityId = specialities[0].ID,
+                CabinetNumber = 2
         }};
     }
 
@@ -71,14 +72,14 @@ internal static class DBSeeder
     {
         return new ScheduleStatus[] {
             new ScheduleStatus() {
-            ID = 1,
-            Status = "Ожидание приёма"
+                ID = 1,
+                Status = "Ожидание приёма"
         }, new ScheduleStatus() {
-            ID = 2,
-            Status = "Приём оказан"
+                ID = 2,
+                Status = "Приём оказан"
         }, new ScheduleStatus() {
-            ID = 3,
-            Status = "Приём не оказан"
+                ID = 3,
+                Status = "Приём не оказан"
         }};
     }
 
@@ -86,13 +87,13 @@ internal static class DBSeeder
     {
         return new Cabinet[] {
             new Cabinet() {
-            Number = 2
+                Number = 2
         }, new Cabinet() {
-            Number = 62
+                Number = 62
         }, new Cabinet() {
-            Number = 12
+                Number = 12
         }, new Cabinet() {
-            Number = 69
+                Number = 69
         }};
     }
 }

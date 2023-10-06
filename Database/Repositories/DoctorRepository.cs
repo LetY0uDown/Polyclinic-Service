@@ -55,6 +55,10 @@ public sealed class DoctorRepository : IRepository<Doctor>
 
     public async Task<List<Doctor>> WhereAsync (Expression<Func<Doctor, bool>> func)
     {
-        return await _context.Doctors.Where(func).ToListAsync();
+        return await _context.Doctors.Include(d => d.Cabinet)
+                                     .Include(d => d.Schedules)
+                                     .Include(d => d.Speciality)
+                                     .Where(func)
+                                     .ToListAsync();
     }
 }

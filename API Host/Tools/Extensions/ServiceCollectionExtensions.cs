@@ -20,7 +20,12 @@ namespace API_Host.Tools.Extensions;
 /// </summary>
 internal static class ServiceCollectionExtensions
 {
-    internal static IServiceCollection AddTools (this IServiceCollection services, IConfiguration config)
+    /// <summary>
+    /// Добавляет различные инструменты для работы
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    internal static IServiceCollection AddTools (this IServiceCollection services)
     {
         services.AddTransient<IStringHasher, StringHasher>();
         services.AddTransient<JWTTokenGenerator>();
@@ -36,14 +41,16 @@ internal static class ServiceCollectionExtensions
     /// <returns></returns>
     internal static IServiceCollection AddDatabase (this IServiceCollection services)
     {
-        services.AddDbContext<PolyclinicContext, PolyclinicContextHome>();
+        services.AddDbContext<PolyclinicContext, PolyclinicContextCollege>();
 
         services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IClientService, ClientService>();
 
         services.AddScoped<IRepository<Doctor>, DoctorRepository>();
+        services.AddScoped<IDoctorService, DoctorService>();
 
         services.AddScoped<IRepository<Speciality>, SpecialityRepository>();
+        services.AddScoped<ISpecialityService, SpecialityService>();
 
         services.AddScoped<IRepository<Schedule>, ScheduleRepository>();
         services.AddScoped<IScheduleService, ScheduleService>();
