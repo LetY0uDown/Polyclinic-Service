@@ -1,6 +1,7 @@
 ﻿using API_Host.Services;
 using Database.Services;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Host.Controllers;
@@ -25,7 +26,7 @@ public class SpecialityController : ControllerBase
         return Ok(specs.Select(_converter.ConvertSpeciality));
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}"), Authorize]
     public async Task<ActionResult<SpecialityDTO>> GetSpecialityByID ([FromRoute] Guid id)
     {
         var speciality = await _specialityService.FindAsync(id);

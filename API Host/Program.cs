@@ -4,9 +4,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(useAuthorization: false);
+builder.Services.AddSwaggerGen(useAuthorization: true);
 builder.Services.AddDatabase();
+builder.Services.AddJWTAuthentication(builder.Configuration);
 builder.Services.AddTools();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+        builder.WithOrigins("http://localhost:44489")
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+    );
+});
 
 var app = builder.Build();
 
@@ -16,6 +26,8 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors();
 
 app.UseAuthorization();
 app.MapControllers();

@@ -41,7 +41,7 @@ internal static class ServiceCollectionExtensions
     /// <returns></returns>
     internal static IServiceCollection AddDatabase (this IServiceCollection services)
     {
-        services.AddDbContext<PolyclinicContext, PolyclinicContextCollege>();
+        services.AddDbContext<PolyclinicContext, PolyclinicContextHome>();
 
         services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IClientService, ClientService>();

@@ -1,6 +1,7 @@
 ﻿using API_Host.Services;
 using Database.Services;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -26,7 +27,7 @@ public sealed class DoctorsController : ControllerBase
         return Ok(doctors.Select(_converter.ConvertDoctor));
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}"), Authorize]
     public async Task<ActionResult<DoctorDTO>> GetDoctorByID ([FromRoute] Guid id)
     {
         var doctor = await _doctorService.FindAsync(id);

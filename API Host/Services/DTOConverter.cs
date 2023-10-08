@@ -18,7 +18,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = client.ID,
+            ID = client.ID.Value,
             Login = client.Login,
             Email = client.Email,
             Name = client.Name,
@@ -40,12 +40,12 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = doctor.ID,
+            ID = doctor.ID.Value,
             Name = doctor.Name,
             Patronymic = doctor.Patronymic,
             LastName = doctor.LastName,
-            CabinetNumber = doctor.CabinetNumber,
-            SpecialityID = doctor.SpecialityId,
+            CabinetNumber = doctor.CabinetNumber.Value,
+            SpecialityID = doctor.SpecialityId!.Value.Value,
             SpecialityTitle = doctor.Speciality?.Title
         };
     }
@@ -61,7 +61,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = schedule.ID,
+            ID = schedule.ID.Value,
             Date = schedule.Date,
             Status = schedule.Status?.Status,
             Doctor = ConvertDoctor(schedule.Doctor!),
@@ -80,7 +80,7 @@ public sealed class DTOConverter
             return null!;
 
         return new() {
-            ID = speciality.ID,
+            ID = speciality.ID.Value,
             Title = speciality.Title,
             Doctors = speciality.Doctors.Select(ConvertDoctor).ToList()
         };

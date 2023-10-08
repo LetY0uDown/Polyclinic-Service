@@ -1,10 +1,8 @@
-﻿using Models.IDs;
-
-namespace DTO;
+﻿namespace DTO;
 
 public class ScheduleDTO : Tools.Flags.DTO
 {
-    public ScheduleID ID { get; set; }
+    public Guid ID { get; set; }
 
     public DateTime Date { get; init; }
 
@@ -12,5 +10,5 @@ public class ScheduleDTO : Tools.Flags.DTO
 
     public DoctorDTO Doctor { get; init; } = null!;
 
-    public ClientDTO Client { get; init; } = null!;
+    public ClientDTO? Client { get; init; } = null!;
 }

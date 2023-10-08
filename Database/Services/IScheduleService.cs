@@ -8,9 +8,11 @@ public interface IScheduleService
 {
     IRepository<Schedule> Repository { get; }
 
-    Task GenerateScheduleAsync(DateTime start, DoctorID doctorID);
+    Task GenerateScheduleAsync (DateTime start, DoctorID doctorID);
 
-    Task<List<Schedule>> GetScheduleForDoctor(DoctorID doctorID, DateTime start, DateTime finish);
+    Task<List<Schedule>> GetScheduleForDoctor (DoctorID doctorID, DateTime start, DateTime finish);
+
+    Task<List<Schedule>> GetFreeSchedulesBySpeciality (SpecialityID specialityID, DateTime start);
 
     /// Находит запись в таблице БД по её ID
     /// </summary>

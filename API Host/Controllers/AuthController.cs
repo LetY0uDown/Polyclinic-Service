@@ -1,7 +1,8 @@
-﻿using Database.Services;
+﻿using API_Host.Services;
+using Database.Services;
+using DTO.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Tools.Auth;
 
 namespace API_Host.Controllers;
 
@@ -9,10 +10,12 @@ namespace API_Host.Controllers;
 public sealed class AuthController : ControllerBase
 {
     private readonly IClientService _clientService;
+    private readonly JWTTokenGenerator _jwtGenerator;
 
-    public AuthController (IClientService clientService)
+    public AuthController (IClientService clientService, JWTTokenGenerator jwtGenerator)
     {
         _clientService = clientService;
+        _jwtGenerator = jwtGenerator;
     }
 
     [HttpPost("Login")]
@@ -30,7 +33,10 @@ public sealed class AuthController : ControllerBase
             return Unauthorized("Неверный пароль. Попробуйте ввести его ещё раз, или восстановить доступ к вашей учётной записи.");
         }
 
-        var auth = new AuthorizationData(client.ID.ToString());
+        var auth = new AuthorizationData {
+            ID = client.ID.Value,
+            JWTToken = _jwtGenerator.GetToken(data.EMail, data.Password)
+        };
 
         return Ok(auth);
     }
@@ -52,7 +58,10 @@ public sealed class AuthController : ControllerBase
 
         await _clientService.Repository.AddAsync(client);
 
-        var auth = new AuthorizationData(client.ID.ToString());
+        var auth = new AuthorizationData {
+            ID = client.ID.Value,
+            JWTToken = _jwtGenerator.GetToken(data.EMail, data.Password)
+        };
 
         return Ok(auth);
     }

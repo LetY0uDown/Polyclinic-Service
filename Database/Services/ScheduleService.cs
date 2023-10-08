@@ -6,7 +6,7 @@ namespace Database.Services;
 
 public sealed class ScheduleService : IScheduleService
 {
-    public ScheduleService(IRepository<Schedule> repository)
+    public ScheduleService (IRepository<Schedule> repository)
     {
         Repository = repository;
     }
@@ -18,7 +18,7 @@ public sealed class ScheduleService : IScheduleService
         return await Repository.FirstOrDefaultAsync(s => s.ID == id);
     }
 
-    public async Task GenerateScheduleAsync(DateTime start, DoctorID doctorID)
+    public async Task GenerateScheduleAsync (DateTime start, DoctorID doctorID)
     {
         start = new DateTime(start.Year, start.Month, start.Day, 7, 0, 0);
 
@@ -41,7 +41,14 @@ public sealed class ScheduleService : IScheduleService
         }
     }
 
-    public async Task<List<Schedule>> GetScheduleForDoctor(DoctorID doctorID, DateTime start, DateTime finish)
+    public async Task<List<Schedule>> GetFreeSchedulesBySpeciality (SpecialityID specialityID, DateTime start)
+    {
+        return await Repository.WhereAsync(s => s.Doctor.SpecialityId == specialityID
+                                                && s.Date >= start
+                                                && s.ClientId == null);
+    }
+
+    public async Task<List<Schedule>> GetScheduleForDoctor (DoctorID doctorID, DateTime start, DateTime finish)
     {
         return await Repository.WhereAsync(s => s.DoctorId == doctorID);
     }

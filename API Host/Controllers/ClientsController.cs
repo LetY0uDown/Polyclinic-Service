@@ -1,6 +1,7 @@
 ﻿using API_Host.Services;
 using Database.Services;
 using DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API_Host.Controllers;
@@ -18,7 +19,7 @@ public sealed class ClientsController : ControllerBase
         _dtoConverter = dtoConverter;
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id:guid}"), Authorize]
     public async Task<ActionResult<ClientDTO>> UpdateClientData ([FromRoute] Guid id,
                                                                  [FromBody] ClientDTO clientData)
     {
@@ -41,7 +42,7 @@ public sealed class ClientsController : ControllerBase
         return Ok(_dtoConverter.ConvertClient(client));
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}"), Authorize]
     public async Task<ActionResult<ClientDTO>> GetClient ([FromRoute] Guid id)
     {
         var client = await _clientService.FindAsync(id);
