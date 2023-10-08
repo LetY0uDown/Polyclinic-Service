@@ -41,10 +41,12 @@ public sealed class ClientsController : ControllerBase
             return NotFound("Ошибка.Данные не найдены D:");
         }
 
-        // Обновляем Ф.И.О. и сохраняем
+        // Обновляем данные и сохраняем
         client.Name = clientData.Name;
         client.LastName = clientData.LastName;
         client.Patronymic = clientData.Patronymic;
+
+        client.Login = clientData.Login;
 
         await _clientService.Repository.UpdateAsync(client);
 
