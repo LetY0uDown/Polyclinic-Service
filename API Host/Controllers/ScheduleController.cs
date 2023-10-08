@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_Host.Controllers;
 
+/// <summary>
+/// Контроллер для действий с расписанием
+/// </summary>
 [ApiController, Route("[controller]/")]
 public sealed class ScheduleController : ControllerBase
 {
@@ -19,6 +22,12 @@ public sealed class ScheduleController : ControllerBase
         _scheduleService = scheduleService;
     }
 
+    /// <summary>
+    /// Генерирует расписание до конца недели для определённого врача. Хрень какая-то, но пусть пока будет
+    /// </summary>
+    /// <param name="doctorid"></param>
+    /// <param name="start">Дата отсчёта. Если указанный день недели - суббота, то не генирирует расписание вообще</param>
+    /// <returns></returns>
     [HttpPost("Generate"), Authorize]
     public async Task<ActionResult> GenerateSchedule (Guid doctorid, DateTime start)
     {
@@ -26,6 +35,11 @@ public sealed class ScheduleController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Метод для получения расписания для конкретного клиента
+    /// </summary>
+    /// <param name="clientid"></param>
+    /// <returns></returns>
     [HttpGet("c/{clientid:guid}"), Authorize]
     public async Task<ActionResult<List<ScheduleDTO>>> GetScheduleByClient([FromRoute] Guid clientid)
     {
@@ -34,21 +48,40 @@ public sealed class ScheduleController : ControllerBase
         return Ok(list.Select(_converter.ConvertSchedule).OrderBy(s => s.Date));
     }
 
+    /// <summary>
+    /// Метод для получения расписания для конкретного доктора в заданном отрезке времени
+    /// </summary>
+    /// <param name="doctorid"></param>
+    /// <param name="start">Начало временного отрезка</param>
+    /// <param name="finish">Конец временного отрезка</param>
+    /// <returns></returns>
     [HttpGet("d/{doctorid:guid}"), Authorize]
     public async Task<ActionResult<List<ScheduleDTO>>> GetScheduleByDoctor ([FromRoute] Guid doctorid,
-                                                                            DateTime start, DateTime finish)
+                                                                            [FromQuery] DateTime start,
+                                                                            [FromQuery] DateTime finish)
     {
+        if (start < finish) {
+            return BadRequest("Некорректные даты. Дата начала отсчёта не может быть меньше даты конца отсчёта");
+        }
+
         var list = await _scheduleService.GetScheduleForDoctor(doctorid, start, finish);
 
         return Ok(list.Select(_converter.ConvertSchedule).OrderBy(s => s.Date));
     }
 
+    /// <summary>
+    /// Метод для записи клиента на определённое расписание
+    /// </summary>
+    /// <param name="scheduleDTO">Запись в расписании</param>
+    /// <param name="clientID"></param>
+    /// <returns></returns>
     [HttpPost("{clientID:guid}"), Authorize]
     public async Task<ActionResult> AddSchedule ([FromBody]ScheduleDTO scheduleDTO,
                                                  [FromRoute] Guid clientID)
     {
         var schedule = await _scheduleService.FindAsync(scheduleDTO.ID);
 
+        // Проверяем, что такая запись существует в БД и что туда не записан никто другой. Тут потенциально может возникнуть ошибка, но этот сервис всё равно никто не будет использовать так что по-фи-гу :D
         if (schedule is null) {
             return NotFound("Не найден сщедуль");
         }
@@ -63,6 +96,12 @@ public sealed class ScheduleController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Метод для получания записей в расписании по определённой специальности, в которые никто не записан
+    /// </summary>
+    /// <param name="specialityID"></param>
+    /// <param name="date">Самая ранняя дата возможной записи</param>
+    /// <returns></returns>
     [HttpGet("free/{specialityID:guid}")]
     public async Task<ActionResult<List<ScheduleDTO>>> GetFreeSchedulesBySpeciality ([FromRoute] Guid specialityID,
                                                                                      [FromQuery] DateTime date)

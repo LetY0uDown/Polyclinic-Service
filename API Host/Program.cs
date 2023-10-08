@@ -9,6 +9,7 @@ builder.Services.AddDatabase();
 builder.Services.AddJWTAuthentication(builder.Configuration);
 builder.Services.AddTools();
 
+// ’з, вроде не нужно, но лучше не трогать
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>

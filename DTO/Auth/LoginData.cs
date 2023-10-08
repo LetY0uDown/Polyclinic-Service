@@ -2,6 +2,9 @@
 
 namespace DTO.Auth;
 
+/// <summary>
+/// Класс для хранения и передачи данных клиента
+/// </summary>
 public sealed class LoginData
 {
     [Required(ErrorMessage = "Логин не введён"),

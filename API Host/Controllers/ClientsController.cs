@@ -19,20 +19,29 @@ public sealed class ClientsController : ControllerBase
         _dtoConverter = dtoConverter;
     }
 
+    /// <summary>
+    /// Метод для обновления данных в кабинете пользователя
+    /// </summary>
+    /// <param name="id">ID пользователя</param>
+    /// <param name="clientData">Данные для обновления</param>
+    /// <returns>Обновлённые данные</returns>
     [HttpPut("{id:guid}"), Authorize]
     public async Task<ActionResult<ClientDTO>> UpdateClientData ([FromRoute] Guid id,
                                                                  [FromBody] ClientDTO clientData)
     {
+        // Сравниваем на всякий случай
         if (id != clientData.ID) {
             return BadRequest("Какую-то фигню ты прислал");
         }
 
+        // Ищем клиента в БД
         var client = await _clientService.FindAsync(id);
 
         if (client is null) {
             return NotFound("Ошибка.Данные не найдены D:");
         }
 
+        // Обновляем Ф.И.О. и сохраняем
         client.Name = clientData.Name;
         client.LastName = clientData.LastName;
         client.Patronymic = clientData.Patronymic;
@@ -42,6 +51,11 @@ public sealed class ClientsController : ControllerBase
         return Ok(_dtoConverter.ConvertClient(client));
     }
 
+    /// <summary>
+    /// Метод для получения данных клиента по его ID
+    /// </summary>
+    /// <param name="id">ID пользователя</param>
+    /// <returns></returns>
     [HttpGet("{id:guid}"), Authorize]
     public async Task<ActionResult<ClientDTO>> GetClient ([FromRoute] Guid id)
     {

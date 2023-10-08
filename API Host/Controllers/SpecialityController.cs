@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API_Host.Controllers;
 
+/// <summary>
+/// Контроллер для действия со специальностями
+/// </summary>
 [ApiController, Route("[controller]/")]
 public class SpecialityController : ControllerBase
 {
@@ -18,6 +21,10 @@ public class SpecialityController : ControllerBase
         _specialityService = specialityService;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>Список всех специальностей</returns>
     [HttpGet]
     public async Task<ActionResult<List<SpecialityDTO>>> GetSpecialities ()
     {
@@ -26,6 +33,11 @@ public class SpecialityController : ControllerBase
         return Ok(specs.Select(_converter.ConvertSpeciality));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Специальности по её ID</returns>
     [HttpGet("{id:guid}"), Authorize]
     public async Task<ActionResult<SpecialityDTO>> GetSpecialityByID ([FromRoute] Guid id)
     {

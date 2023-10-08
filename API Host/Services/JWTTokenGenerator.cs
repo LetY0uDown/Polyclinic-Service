@@ -5,6 +5,9 @@ using System.Text;
 
 namespace API_Host.Services;
 
+/// <summary>
+/// Класс для генерации JWT токенов, необходимых для авторизации
+/// </summary>
 public sealed class JWTTokenGenerator
 {
     private readonly IConfiguration _config;

@@ -7,6 +7,9 @@ using Models;
 
 namespace API_Host.Controllers;
 
+/// <summary>
+/// Контроллер, отвечающий за действия с докторами
+/// </summary>
 [ApiController, Route("[controller]/")]
 public sealed class DoctorsController : ControllerBase
 {
@@ -39,6 +42,11 @@ public sealed class DoctorsController : ControllerBase
         return Ok(_converter.ConvertDoctor(doctor));
     }
 
+    /// <summary>
+    /// Метод для получения списка докторов с определённой специальностью
+    /// </summary>
+    /// <param name="specID">ID специльности</param>
+    /// <returns></returns>
     [HttpGet("Speciality/{specID:guid}")]
     public async Task<ActionResult<List<Doctor>>> GetDoctorsBySpeciality ([FromRoute] Guid specID)
     {
