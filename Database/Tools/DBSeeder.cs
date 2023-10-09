@@ -10,9 +10,10 @@ internal static class DBSeeder
     /// Заполняет БД начальными данными, если их там ещё нет
     /// </summary>
     /// <param name="modelBuilder">Ссылка на modelBuilder который, собственно, записывает данные</param>
-    internal static void SeedData (ModelBuilder modelBuilder)
+    public static void SeedData (ModelBuilder modelBuilder)
     {
         var specialities = GetSpecialities();
+        var doctors = GetDoctors(specialities);
 
         modelBuilder.Entity<ScheduleStatus>().HasData(GetScheduleStatuses());
 
@@ -20,7 +21,7 @@ internal static class DBSeeder
 
         modelBuilder.Entity<Speciality>().HasData(specialities);                
 
-        modelBuilder.Entity<Doctor>().HasData(GetDoctors(specialities));
+        modelBuilder.Entity<Doctor>().HasData(doctors);
     }
 
     private static Speciality[] GetSpecialities ()

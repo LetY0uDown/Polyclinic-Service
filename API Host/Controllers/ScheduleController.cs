@@ -1,8 +1,11 @@
 ﻿using API_Host.Services;
+using Database.Repositories;
 using Database.Services;
 using DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Models.IDs;
 
 namespace API_Host.Controllers;
 
@@ -22,16 +25,12 @@ public sealed class ScheduleController : ControllerBase
         _scheduleService = scheduleService;
     }
 
-    /// <summary>
-    /// Генерирует расписание до конца недели для определённого врача. Хрень какая-то, но пусть пока будет
-    /// </summary>
-    /// <param name="doctorid"></param>
-    /// <param name="start">Дата отсчёта. Если указанный день недели - суббота, то не генирирует расписание вообще</param>
-    /// <returns></returns>
-    [HttpPost("Generate"), Authorize]
-    public async Task<ActionResult> GenerateSchedule (Guid doctorid, DateTime start)
+    // хрень какая-то)
+    [HttpPost("Generate")]
+    public async Task<ActionResult> GenerateSchedule (Guid doctorID)
     {
-        await _scheduleService.GenerateScheduleAsync(start, doctorid);
+        await _scheduleService.GenerateScheduleAsync(DateTime.Now, doctorID);
+        
         return NoContent();
     }
 

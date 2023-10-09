@@ -3,6 +3,7 @@ using API_Host.Services.Database;
 using Database;
 using Database.Repositories;
 using Database.Services;
+using Database.Tools;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -40,7 +41,7 @@ internal static class ServiceCollectionExtensions
     /// <returns></returns>
     internal static IServiceCollection AddDatabase (this IServiceCollection services)
     {
-        services.AddDbContext<PolyclinicContext, PolyclinicContextHome>();
+        services.AddDbContext<PolyclinicContext, PolyclinicContextCollege>();
 
         services.AddScoped<IRepository<Client>, ClientRepository>();
         services.AddScoped<IClientService, ClientService>();
